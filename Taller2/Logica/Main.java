@@ -12,6 +12,7 @@ public class Main {
 	private static ArrayList<Gimnasio> listaGimnasios = new ArrayList<Gimnasio>();
 	private static ArrayList<AltoMando>  listaAltoMando = new ArrayList<AltoMando>();
 	private static ArrayList<String> listaHabitats = new ArrayList<String>();
+	
 	private static String nombreJugador = "";
 	private static String ultimoLiderDerrotado = "none";
 	
@@ -49,13 +50,14 @@ public class Main {
 				nuevaPartida();
 				menuPrincipal();
 				break;
+				
 			case "3":
 				System.out.println("Saliendo...");
 				break;
+				
 			default:
 				System.out.println("Opcion inválida.");
 			}
-			
 			
 		} while (!respuesta.equalsIgnoreCase("3"));
 		
@@ -91,11 +93,121 @@ public class Main {
 			
 			switch (respuesta) {
 			
-			
-			
+			case "1":
+				revisarEquipo();
+				break;
+				
+			case "2":
+				salirACapturar();
+				break;
+				
+			case "3":
+				//accesoPC();
+				break;
+				
+			case "4":
+				//retarGimnasio();
+				break;
+				
+			case "5":
+				//desafioAltoMando();
+				break;
+				
+			case "6":
+				curarPokemon();
+				break;
+				
+			case "7":
+				guardarRegistros();
+				System.out.println("Partida guardada.");
+				break;
+				
+			case "8":
+				guardarRegistros();
+				System.out.println("Nos vemos entrenador...");
+				break;
+				
+			default:
+				System.out.println("Opción inválida");
+				break;
+				
 			}
 			
 		} while (!respuesta.equals("8"));
+		
+	}
+
+	private static void salirACapturar() throws IOException {
+		
+		System.out.println("Donde deseas ir a explorar?");
+		System.out.println();
+		System.out.println("Zonas disponibles:");
+		
+		for (int i = 0; i < listaHabitats.size(); i++) {
+			System.out.println((i + 1) + ")" + listaHabitats.get(i));
+		}
+		
+		System.out.println((listaHabitats.size() + 1) + ") Volver al menu." );
+		System.out.println("Ingrese zona: ");
+		
+		int opcionZona = s.nextInt();
+		s.nextLine();
+		
+		if (opcionZona == listaHabitats.size() + 1) {
+			return;
+		}
+		if (opcionZona < 1 || opcionZona > listaHabitats.size() + 1) {
+			System.out.println("Zona no válida");
+			return;
+		}
+		String habitatElegido = listaHabitats.get(opcionZona - 1);
+		
+		ArrayList<Pokemon> pokemonsZona = obtenerPokemonHabitat(habitatElegido);
+		
+		if (pokemonsZona.size() == 0) {
+			System.out.println("No hay Pokémon disponibles en esta zona");
+			return;
+		}
+		
+		Pokemon pokemonBase = generarPokemonAleatorio(pokemonsZona);
+		
+		System.out.println("Oh!! Ha aparecido un increíble " + pokemonBase.getNombre() + "!!");
+		System.out.println();
+		System.out.println("Que deseas hacer?\r\n"
+				+ "\r\n"
+				+ "1) Capturar\r\n"
+				+ "2) Huir\r\n" 
+				+ "> ");
+		String respuesta = s.nextLine();
+		
+		switch (respuesta) {
+		
+		case "1":
+			if (jugadorTienePokemon(pokemonBase.getNombre())) {
+				System.out.println("Ya tienes a " + pokemonBase.getNombre() + " No puedes capturarlo de nuevo.");
+			} else {
+				Pokemon capturado = copiarPokemon(pokemonBase);
+				pokemonsJugador.add(pokemonBase);
+				
+				System.out.println(pokemonBase.getNombre() + " capturado con éxito!!");
+				
+				if (pokemonsJugador.size() <= 6) {
+					System.out.println(pokemonBase.getNombre() + " ha sido agregado a tu equipo!");
+				} else {
+					System.out.println(pokemonBase.getNombre() + "ha sido enviado al PC!");
+				}
+			}
+			break;
+			
+		case "2":
+			System.out.println("Has huido.");
+			break;
+			
+		default:
+			System.out.println("Opción inválida");
+			break;
+		}
+			
 		
 	}
 
@@ -285,6 +397,65 @@ public class Main {
 			bw.newLine();
 		}
 		bw.close();
+	}
+	
+	private static void revisarEquipo() {
+		
+		System.out.println("Equipo actual:");
+		
+		if (pokemonsJugador.size() == 0) {
+			System.out.println("No tienes pokemons en tu equipo");
+			return;
+		}
+		
+		for (int i = 0; i < pokemonsJugador.size() && i < 6; i++) {
+			Pokemon p = pokemonsJugador.get(i);
+			
+			System.out.println((i + 1) + ")" + p.getNombre()
+            + "|" + p.getTipo()
+            + "|Stats totales: " + p.getStatsTotales()
+            + "|Estado: " + p.getEstado());
+		}
+	}
+	
+	private static ArrayList<Pokemon> obtenerPokemonHabitat(String habitat){
+		
+		ArrayList<Pokemon> encontrados = new ArrayList<Pokemon>();
+		
+		for (Pokemon p : listaPokedex) {
+			if (p.getHabitat().equalsIgnoreCase(habitat)) {
+				encontrados.add(p);
+			}
+		}
+		
+		return null;
+	}
+	private static Pokemon generarPokemonAleatorio(ArrayList<Pokemon> pokemonsZona) {
+		
+		Random r = new Random();
+		double numero = r.nextDouble();
+		double acumulado = 0;
+		
+		for (Pokemon p : pokemonsZona) {
+			acumulado += p.getPorcentajeAparicion();
+			
+			if (numero <= acumulado) {
+				return p;
+			}
+		}
+		
+		return pokemonsZona.get(pokemonsZona.size() - 1);
+	}
+	
+	private static boolean jugadorTienePokemon(String nombrePokemon) {
+		
+		for (Pokemon p : pokemonsJugador) {
+			if (p.getNombre().equalsIgnoreCase(nombrePokemon)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 }
