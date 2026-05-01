@@ -13,10 +13,10 @@ public class Main {
 	private static ArrayList<AltoMando>  listaAltoMando = new ArrayList<AltoMando>();
 	private static ArrayList<String> listaHabitats = new ArrayList<String>();
 	private static String nombreJugador = "";
-	private static int medallas = 0;
+	private static String ultimoLiderDerrotado = "none";
 	
 	
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws IOException {
 		
 		cargarArchivos();
 		menuInicial();
@@ -24,7 +24,7 @@ public class Main {
 		
 	}
 
-	private static void menuInicial() {
+	private static void menuInicial() throws IOException {
 		String respuesta;
 		
 		do {
@@ -34,10 +34,116 @@ public class Main {
 					+ "> ");
 			respuesta = s.nextLine();
 			
+			switch (respuesta) {
+			
+			case "1":
+				if (existePartidaGuardada()) {
+					cargarRegistros();
+					menuPrincipal();
+				} else {
+					System.out.println("No existe una partida guardada");
+				}
+				break;
+			 
+			case "2":
+				nuevaPartida();
+				menuPrincipal();
+				break;
+			case "3":
+				System.out.println("Saliendo...");
+				break;
+			default:
+				System.out.println("Opcion inválida.");
+			}
 			
 			
 		} while (!respuesta.equalsIgnoreCase("3"));
 		
+	}
+
+	private static void nuevaPartida() throws IOException {
+		
+		pokemonsJugador.clear();
+		ultimoLiderDerrotado = "none";
+		
+		System.out.println("Ingrese apodo: ");
+		nombreJugador = s.nextLine();
+		
+		guardarRegistros();
+		
+		System.out.println("Bienvenido " + nombreJugador + "!!");
+	}
+
+	private static void menuPrincipal() throws IOException {
+		
+		String respuesta;
+		do {
+			System.out.println("1) Revisar equipo.\r\n"
+					+ "2) Salir a capturar.\r\n"
+					+ "3) Acceso al PC (cambiar Pokémon del equipo).\r\n"
+					+ "4) Retar un gimnasio.\r\n"
+					+ "5) Desafío al Alto Mando.\r\n"
+					+ "6) Curar Pokémon.\r\n"
+					+ "7) Guardar.\r\n"
+					+ "8) Guardar y Salir.\r\n"
+					+ "> ");
+			respuesta = s.nextLine();
+			
+			switch (respuesta) {
+			
+			
+			
+			}
+			
+		} while (!respuesta.equals("8"));
+		
+	}
+
+	private static void cargarRegistros() throws FileNotFoundException {
+		
+		pokemonsJugador.clear();
+		File f = new File("Registros.txt");
+		Scanner sc = new Scanner(f);
+		
+		
+		if (sc.hasNextLine()) {
+			String primeraLinea = sc.nextLine();
+			String[] datosJugador = primeraLinea.split(";");
+			
+			nombreJugador = datosJugador[0];
+			ultimoLiderDerrotado = datosJugador[1];
+		while (sc.hasNextLine()) {
+			String linea = sc.nextLine();
+			String[] partes = linea.split(";");
+			
+			String nombrePokemon = partes[0];
+			String estado = partes[1];
+			
+			Pokemon pokemonBase = buscarPokemonPorNombre(nombrePokemon);
+			if (pokemonBase != null) {
+				Pokemon copia = copiarPokemon(pokemonBase);
+				copia.setEstado(estado);
+				pokemonsJugador.add(copia);
+				}
+			}
+		System.out.println("Bienvenido " + nombreJugador + "!!");
+		}
+		
+		sc.close();
+	}
+
+	private static boolean existePartidaGuardada() throws FileNotFoundException {
+		
+		File f = new File("Registros.txt");
+		Scanner sc = new Scanner(f);
+		
+		if (sc.hasNextLine()) {
+			sc.close();
+			return true;
+		}
+		
+		sc.close();
+		return false;
 	}
 
 	private static void cargarArchivos() throws FileNotFoundException {
@@ -160,6 +266,25 @@ public class Main {
 	private static Pokemon copiarPokemon(Pokemon p) {
 		return new Pokemon(p.getNombre(), p.getHabitat(), p.getPorcentajeAparicion(), p.getVida(), p.getAtaque(), p.getDefensa(), 
 				p.getAtaqueEspecial(),p.getDefensaEspecial(),p.getVelocidad(),p.getTipo());
+	}
+	private static void curarPokemon() throws IOException{
+		for (Pokemon p : pokemonsJugador) {
+			p.setEstado("Vivo");
+		}
+		System.out.println("Tu equipo se ha recuperado!");
+	}
+	private static void guardarRegistros() throws IOException {
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter("Registros.txt"));
+		
+		bw.write(nombreJugador + ";" + ultimoLiderDerrotado);
+		bw.newLine();
+		
+		for (Pokemon p : pokemonsJugador) {
+			bw.write(p.getNombre() + ";" + p.getEstado());
+			bw.newLine();
+		}
+		bw.close();
 	}
 	
 }
