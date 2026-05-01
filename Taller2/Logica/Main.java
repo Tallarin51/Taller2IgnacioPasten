@@ -12,10 +12,31 @@ public class Main {
 	private static ArrayList<Gimnasio> listaGimnasios = new ArrayList<Gimnasio>();
 	private static ArrayList<AltoMando>  listaAltoMando = new ArrayList<AltoMando>();
 	private static ArrayList<String> listaHabitats = new ArrayList<String>();
+	private static String nombreJugador = "";
+	private static int medallas = 0;
+	
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
 		cargarArchivos();
+		menuInicial();
+		
+		
+	}
+
+	private static void menuInicial() {
+		String respuesta;
+		
+		do {
+			System.out.println("1) Continuar.\r\n"
+					+ "2) Nueva Partida.\r\n"
+					+ "3) Salir.\r\n"
+					+ "> ");
+			respuesta = s.nextLine();
+			
+			
+			
+		} while (!respuesta.equalsIgnoreCase("3"));
 		
 	}
 
