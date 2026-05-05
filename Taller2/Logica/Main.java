@@ -102,7 +102,7 @@ public class Main {
 				break;
 				
 			case "3":
-				//accesoPC();
+				accesoPC();
 				break;
 				
 			case "4":
@@ -134,6 +134,70 @@ public class Main {
 			}
 			
 		} while (!respuesta.equals("8"));
+		
+	}
+
+	private static void accesoPC() {
+		
+		if (pokemonsJugador.size() == 0) {
+			System.out.println("No tienes Pokémon capturados.");
+			return;
+		}
+		
+		System.out.println("Pokémon capturados:");
+		
+		for (int i = 0; i < pokemonsJugador.size(); i++) {
+			
+			Pokemon p = pokemonsJugador.get(i);
+			System.out.println((i + 1) + ")" + p.getNombre() + " - " + p.getEstado());
+		}
+		
+		System.out.println();
+		System.out.println("1) Cambiar Pókemon.");
+		System.out.println("2) Salir.");
+		System.out.println("> ");
+		
+		String respuesta = s.nextLine();
+		
+		switch (respuesta) {
+		
+		case "1":
+			cambiarPokemon();
+			break;
+			
+		case "2":
+			System.out.println("Volviendo al menú...");
+			break;
+			
+		default:
+			System.out.println("Opción inválida");
+			break;
+		}
+	}
+
+	private static void cambiarPokemon() {
+		
+		try {
+			
+			System.out.println("Ingrese el nombre del primer Pokémon: ");
+			int posicion1 = Integer.parseInt(s.nextLine());
+			
+			System.out.println("Ingrese el número del segundo Pokémon: ");
+			int posicion2 = Integer.parseInt(s.nextLine());
+			
+			if (posicion1 < 1 || posicion1 > pokemonsJugador.size() || posicion2 < 1 || posicion2 > pokemonsJugador.size() ) {
+				System.out.println("Posición inválida");
+				return;
+			}
+			Pokemon aux = pokemonsJugador.get(posicion1 - 1);
+			pokemonsJugador.set(posicion1 - 1, pokemonsJugador.get(posicion2 - 1));
+			pokemonsJugador.set(posicion2 - 1, aux);
+			
+			System.out.println("Pokémon intercambiados correctamente.");
+		} catch (NumberFormatException e) {
+			System.out.println("Debe ingresar números válidos");
+		}
+		
 		
 	}
 
@@ -187,14 +251,14 @@ public class Main {
 				System.out.println("Ya tienes a " + pokemonBase.getNombre() + " No puedes capturarlo de nuevo.");
 			} else {
 				Pokemon capturado = copiarPokemon(pokemonBase);
-				pokemonsJugador.add(pokemonBase);
+				pokemonsJugador.add(capturado);
 				
 				System.out.println(pokemonBase.getNombre() + " capturado con éxito!!");
 				
 				if (pokemonsJugador.size() <= 6) {
 					System.out.println(pokemonBase.getNombre() + " ha sido agregado a tu equipo!");
 				} else {
-					System.out.println(pokemonBase.getNombre() + "ha sido enviado al PC!");
+					System.out.println(pokemonBase.getNombre() + " ha sido enviado al PC!");
 				}
 			}
 			break;

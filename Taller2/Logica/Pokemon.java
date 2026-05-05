@@ -113,9 +113,11 @@ public class Pokemon {
 	public String getEstado() {
 		return estado;
 	}
-
+	
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-
+	public int getStatsTotales() {
+		return vida + ataque + defensa + ataqueEspecial + defensaEspecial + velocidad;
+	}
 }
