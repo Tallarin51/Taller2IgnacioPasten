@@ -23,6 +23,35 @@ public class TablaTipos {
 		        {  1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 0.5 }, // SINIESTRO
 		        {  1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 1.0 }  // HADA
 		   };
+
+	 public static double multiplicador(String tipoAtacante, String tipoAtacado) {
+		 
+		 String tipos[] = {"Normal", "Fuego", "Agua", "Planta", "Electrico", "Hielo", "Lucha",
+				 "Veneno", "Tierra", "Volador", "Psiquico", "Bicho", "Roca", "Fantasma", 
+				 "Dragon", "Acero", "Siniestro", "Hada" };
+		 
+		 int fila = -1;
+		 int columna = -1;
+		 
+		 for (int i = 0; i < tipos.length; i++) {
+			 
+			 if (tipos[i].equalsIgnoreCase(tipoAtacante)) {
+				 fila = i;
+			 }
+			 
+			 if (tipos[i].equalsIgnoreCase(tipoAtacado)) {
+				 columna = i;
+			 }
+			 
+		 }
+		 
+		 if (fila == - 1 || columna == -1) {
+			 return 1.0;
+		 }
+		 
+		 
+		 return EFECTIVIDAD[fila][columna];
+	 }
 }
 	
 
