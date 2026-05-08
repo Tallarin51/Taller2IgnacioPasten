@@ -12,7 +12,7 @@ El programa trabaja con archivos `.txt` para cargar la información base del jue
 
 **Nombre:** Ignacio Antonio Pastén Durán  
 **RUT:** 22.067.577-7  
-**Github::** Tallarin51  
+**Github:** Tallarin51  
 
 ---
 
