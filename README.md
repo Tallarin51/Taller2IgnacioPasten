@@ -34,6 +34,7 @@ El proyecto está organizado en el package:
 
 ```java
 package logica;
+```
 Las clases principales son:
 
 ```text
