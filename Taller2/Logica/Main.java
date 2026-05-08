@@ -1,3 +1,4 @@
+//Ignacio Antonio Pastén Durán 22.067.577-7 ICCI
 package logica;
 import java.io.*;
 import java.util.Scanner;
@@ -16,7 +17,8 @@ public class Main {
 	private static String nombreJugador = "";
 	private static String ultimoLiderDerrotado = "none";
 	
-	
+	// Muestra el menú inicial del juego, permitiendo continuar una partida,
+	// crear una nueva o salir del programa.
 	public static void main(String[] args) throws IOException {
 		
 		cargarArchivos();
@@ -24,7 +26,9 @@ public class Main {
 		
 		
 	}
-
+	
+	// Muestra el menú inicial y permite al jugador elegir entre continuar,
+	// iniciar una nueva partida o salir del programa.
 	private static void menuInicial() throws IOException {
 		String respuesta;
 		
@@ -63,7 +67,9 @@ public class Main {
 		} while (!respuesta.equalsIgnoreCase("3"));
 		
 	}
-
+	
+	// Crea una nueva partida, limpia los Pokémon del jugador,
+	// reinicia el progreso de gimnasios y guarda el nuevo nombre en Registros.txt.
 	private static void nuevaPartida() throws IOException {
 		
 		pokemonsJugador.clear();
@@ -77,7 +83,9 @@ public class Main {
 		
 		System.out.println("Bienvenido " + nombreJugador + "!!");
 	}
-
+	
+	// Muestra el menú principal del juego después de iniciar o cargar una partida.
+	// Desde aquí se accede a capturas, equipo, PC, gimnasios, Alto Mando, curación y guardado.
 	private static void menuPrincipal() throws IOException {
 		
 		String respuesta;
@@ -138,7 +146,9 @@ public class Main {
 		} while (!respuesta.equals("8"));
 		
 	}
-
+	
+	// Permite desafiar al Alto Mando solo si el jugador derrotó los 8 gimnasios.
+	// Ejecuta combates consecutivos contra todos sus miembros.
 	private static void desafioAltoMando() {
 		
 		if (obtenerUltimoGimnasioDerrotado() < 8) {
@@ -176,6 +186,7 @@ public class Main {
 		System.out.println("Felicidades " + nombreJugador + "!! Te has coronado como campeón Pokémon!");
 	}
 	
+	// Ejecuta el combate contra un miembro específico del Alto Mando.
 	private static boolean combatirContraAltoMando(AltoMando miembro) {
 		
 		Pokemon pokemonJugador = obtenerPrimerPokemonVivo();
@@ -250,6 +261,7 @@ public class Main {
 		return true;
 	}
 	
+	// Reinicia todos los Pokémon del Alto Mando a estado Vivo antes de iniciar el desafío.
 	private static void reiniciarAltoMando() {
 		
 		for (AltoMando miembro : listaAltoMando) {
@@ -260,6 +272,8 @@ public class Main {
 		
 	}
 	
+	// Permite seleccionar un gimnasio, valida si puede ser retado
+	// y ejecuta el combate contra su líder.
 	private static void retarGimnasio() {
 		
 		if (pokemonsJugador.size() == 0) {
@@ -332,6 +346,7 @@ public class Main {
 		
 	}
 	
+	// Verifica si el jugador tiene al menos un Pokémon vivo entre los primeros seis del equipo.
 	private static boolean tienePokemonVivoEnEquipo() {
 		
 		for (int i = 0; i < pokemonsJugador.size() && i < 6; i++) {
@@ -347,6 +362,7 @@ public class Main {
 		return false;
 	}
 	
+	// Retorna el primer Pokémon vivo del equipo del jugador.
 	private static Pokemon obtenerPrimerPokemonVivo() {
 		
 		for (int i = 0; i < pokemonsJugador.size() && i < 6; i++) {
@@ -360,6 +376,7 @@ public class Main {
 		return null;
 	}
 	
+	// Permite elegir un Pokémon vivo del equipo durante una batalla.
 	private static Pokemon elegirPokemonVivo() {
 		
 		System.out.println("Elige un Pokémon vivo de tu equipo: ");
@@ -396,6 +413,8 @@ public class Main {
 		
 	}
 	
+	// Simula el combate entre un Pokémon del jugador y uno rival.
+	// Calcula stats, aplica efectividad de tipos y define al ganador.
 	private static boolean combatirPokemon(Pokemon pokemonJugador, Pokemon pokemonRival) {
 		
 		int statsJugador = pokemonJugador.getStatsTotales();
@@ -433,6 +452,7 @@ public class Main {
 		}
 	}
 	
+	// Obtiene el número del último gimnasio derrotado según el líder guardado en Registros.txt.
 	private static int obtenerUltimoGimnasioDerrotado() {
 		
 		if (ultimoLiderDerrotado.equalsIgnoreCase("none")) {
@@ -448,6 +468,7 @@ public class Main {
 		return 0;
 	}
 	
+	// Valida si un gimnasio puede ser retado según el progreso del jugador.
 	private static boolean puedeRetarGimnasio(Gimnasio gimnasio) {
 		
 		int numeroGimnasio = gimnasio.getNumero();
@@ -462,6 +483,7 @@ public class Main {
 		
 	}
 	
+	// Ejecuta el combate completo contra todos los Pokémon de un gimnasio.
 	private static boolean combatirContraGimnasio(Gimnasio gimnasio) {
 		
 		Pokemon pokemonJugador = obtenerPrimerPokemonVivo();
@@ -537,6 +559,7 @@ public class Main {
 		return true;
 	}
 	
+	// Muestra todos los Pokémon capturados y permite acceder al cambio de posiciones del equipo.
 	private static void accesoPC() {
 		
 		if (pokemonsJugador.size() == 0) {
@@ -574,7 +597,9 @@ public class Main {
 			break;
 		}
 	}
-
+	
+	// Permite intercambiar la posición de dos Pokémon capturados.
+	// Esto permite modificar cuáles están dentro de los primeros seis del equipo.
 	private static void cambiarPokemon() {
 		
 		try {
@@ -600,7 +625,9 @@ public class Main {
 		
 		
 	}
-
+	
+	// Permite al jugador elegir una zona, genera un Pokémon aleatorio según su hábitat
+	// y da la opción de capturarlo o huir.
 	private static void salirACapturar() throws IOException {
 		
 		System.out.println("Donde deseas ir a explorar?");
@@ -679,7 +706,9 @@ public class Main {
 		
 		
 	}
-
+	
+	// Carga la partida guardada desde Registros.txt.
+	// Recupera el nombre del jugador, el último líder derrotado y sus Pokémon capturados.
 	private static void cargarRegistros() throws FileNotFoundException {
 		
 		pokemonsJugador.clear();
@@ -713,7 +742,8 @@ public class Main {
 		
 		sc.close();
 	}
-
+	
+	// Revisa si Registros.txt contiene información para saber si existe una partida guardada.
 	private static boolean existePartidaGuardada() throws FileNotFoundException {
 		
 		File f = new File("Registros.txt");
@@ -727,7 +757,8 @@ public class Main {
 		sc.close();
 		return false;
 	}
-
+	// Carga los archivos base del juego: Pokédex, hábitats, gimnasios y Alto Mando.
+	// Estos datos son necesarios antes de iniciar o continuar una partida.
 	private static void cargarArchivos() throws FileNotFoundException {
 		
 		cargarPokedex();
@@ -736,7 +767,8 @@ public class Main {
 		cargarAltoMando();
 		
 	}
-
+	
+	// Lee Alto Mando.txt, crea los miembros del Alto Mando y les asigna sus equipos Pokémon.
 	private static void cargarAltoMando() throws FileNotFoundException {
 		
 		File f = new File("Alto Mando.txt");
@@ -762,7 +794,8 @@ public class Main {
 		}
 		
 	}
-
+	
+	// Lee Gimnasios.txt, crea los gimnasios y les asigna sus Pokémon correspondientes.
 	private static void cargarGimnasios() throws FileNotFoundException {
 
 		File f = new File("Gimnasios.txt");
@@ -792,7 +825,8 @@ public class Main {
 		}
 		
 	}
-
+	
+	// Lee Pokedex.txt y carga todos los Pokémon base del juego en listaPokedex.
 	private static void cargarPokedex() throws FileNotFoundException {
 		
 		File f = new File("Pokedex.txt");
@@ -817,7 +851,8 @@ public class Main {
 		}
 		
 	}
-
+	
+	// Lee Habitats.txt y carga las zonas disponibles para capturar Pokémon.
 	private static void cargarHabitats() throws FileNotFoundException {
 		
 		File f = new File("Habitats.txt");
@@ -832,7 +867,9 @@ public class Main {
 		}
 		
 	}
-
+	
+	// Busca un Pokémon por nombre dentro de la Pokédex.
+	// Se usa para construir equipos de gimnasios, Alto Mando y registros guardados.
 	private static Pokemon buscarPokemonPorNombre(String nombre) {
 		
 		for (Pokemon p : listaPokedex) {
@@ -844,16 +881,23 @@ public class Main {
 		return null;
 	}
 	
+	// Crea una copia independiente de un Pokémon base.
+	// Esto evita modificar directamente los Pokémon originales de la Pokédex.
 	private static Pokemon copiarPokemon(Pokemon p) {
 		return new Pokemon(p.getNombre(), p.getHabitat(), p.getPorcentajeAparicion(), p.getVida(), p.getAtaque(), p.getDefensa(), 
 				p.getAtaqueEspecial(),p.getDefensaEspecial(),p.getVelocidad(),p.getTipo());
 	}
+	
+	// Cura todos los Pokémon del jugador, cambiando su estado a Vivo.
 	private static void curarPokemon() throws IOException{
 		for (Pokemon p : pokemonsJugador) {
 			p.setEstado("Vivo");
 		}
 		System.out.println("Tu equipo se ha recuperado!");
 	}
+	
+	// Guarda la partida actual en Registros.txt,
+	// incluyendo nombre del jugador, último líder derrotado y estado de cada Pokémon.
 	private static void guardarRegistros() throws IOException {
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter("Registros.txt"));
@@ -868,6 +912,8 @@ public class Main {
 		bw.close();
 	}
 	
+	// Muestra los primeros seis Pokémon del jugador,
+	// que corresponden al equipo activo para combatir.
 	private static void revisarEquipo() {
 		
 		System.out.println("Equipo actual:");
@@ -887,6 +933,7 @@ public class Main {
 		}
 	}
 	
+	// Obtiene todos los Pokémon que pertenecen a un hábitat específico.
 	private static ArrayList<Pokemon> obtenerPokemonHabitat(String habitat){
 		
 		ArrayList<Pokemon> encontrados = new ArrayList<Pokemon>();
@@ -899,6 +946,8 @@ public class Main {
 		
 		return encontrados;
 	}
+	
+	// Genera un Pokémon aleatorio respetando su porcentaje de aparición dentro de una zona.
 	private static Pokemon generarPokemonAleatorio(ArrayList<Pokemon> pokemonsZona) {
 		
 		Random r = new Random();
@@ -916,6 +965,8 @@ public class Main {
 		return pokemonsZona.get(pokemonsZona.size() - 1);
 	}
 	
+	// Verifica si el jugador ya tiene un Pokémon capturado,
+	// para evitar que se repitan Pokémon en su lista.
 	private static boolean jugadorTienePokemon(String nombrePokemon) {
 		
 		for (Pokemon p : pokemonsJugador) {
@@ -926,6 +977,8 @@ public class Main {
 		
 		return false;
 	}
+	
+	// Actualiza el estado de los gimnasios según el último líder derrotado.
 	private static void actualizarEstadosGimnasios() {
 		int ultimo = obtenerUltimoGimnasioDerrotado();
 		
@@ -938,6 +991,7 @@ public class Main {
 		}
 	}
 	
+	// Reinicia los Pokémon de un gimnasio a estado Vivo antes de comenzar una batalla.
 	private static void reiniciarGimnasio(Gimnasio gimnasio) {
 		for (Pokemon p : gimnasio.getPokemonGimnasio()) {
 			p.setEstado("Vivo");
